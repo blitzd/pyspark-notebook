@@ -5,7 +5,7 @@ Install `docker-compose`
 pip install -U docker-compose
 ```
 
-To start your apllication. Run following command 
+To start your application, run following command 
 ```shell
 docker-compose up -d
 ```
