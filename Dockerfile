@@ -54,7 +54,11 @@ RUN \
 
 
 # install python packages
-RUN apt-get install -y libatlas-base-dev gfortran python-zmq
+RUN \
+    apt-get update && \
+    apt-get install -y libatlas-base-dev \
+        gfortran \
+        python-zmq
 
 RUN pip install py4j \
     ipython[notebook] \
