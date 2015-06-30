@@ -10,7 +10,10 @@ To start your apllication. Run following command
 docker-compose up -d
 ```
 
-Visit ```http://127.0.0.1:8888```
+Then open the notebook page
+```shell
+open http://localhost:8888
+```
 
 To stop the service 
 ```shell
