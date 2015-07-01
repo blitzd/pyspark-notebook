@@ -12,7 +12,7 @@ docker-compose up -d
 
 Then open the notebook page
 ```shell
-open http://localhose:8888
+open http://localhost:8888
 ```
 or if using boot2docker
 ```shell
