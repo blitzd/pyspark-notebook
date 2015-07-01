@@ -2,10 +2,11 @@ FROM buildpack-deps:trusty
 
 
 # install java
+# https://github.com/dockerfile/java/blob/master/oracle-java7/Dockerfile
 RUN \
-    echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" > /etc/apt/sources.list.d/webupd8team-java.list && \
-    echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list.d/webupd8team-java.list && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886 && \
+    apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository -y ppa:webupd8team/java && \
     apt-get update && \
     echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
     apt-get install -y oracle-java7-installer && \
@@ -28,9 +29,11 @@ RUN \
     build/mvn -DskipTests clean package
 
 ENV PYTHONPATH $SPARK_HOME/python/:$PYTHONPATH
+COPY spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf
 
 
 # install python
+# https://github.com/docker-library/python/blob/89890623a062f79d5dd6d8f5e1ecc6d823bff588/2.7/Dockerfile
 ENV PYTHON_VERSION 2.7.10
 ENV PYTHON_SOURCE /usr/local/src/python-$PYTHON_VERSION
 
@@ -81,11 +84,20 @@ RUN pip install matplotlib \
 
 # install notebook
 RUN ipython profile create pyspark
-COPY pyspark-notebook.py /root/.ipython/profile_pyspark/startup/pyspark-notebook.py
+
+# configure notebook
+ENV PROFILE_HOME /root/.ipython/profile_pyspark
+COPY pyspark-notebook.py $PROFILE_HOME/startup/00-pyspark-notebook.py
+COPY custom.css $PROFILE_HOME/static/custom/custom.css
+RUN \
+    echo "c.IPKernelApp.matplotlib = 'inline'" >> $PROFILE_HOME/ipython_kernel_config.py && \
+    echo "c.InlineBackend.rc = {}" >> $PROFILE_HOME/ipython_kernel_config.py
 
 VOLUME /notebook
 WORKDIR /notebook
 
+
 EXPOSE 8888
+EXPOSE 4040
 
 CMD ipython notebook --no-browser --profile=pyspark --ip=*
