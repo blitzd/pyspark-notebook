@@ -12,7 +12,7 @@ docker-compose up -d
 
 Then open the notebook page
 ```shell
-open http://localhost:8888
+open http://$(boot2docker ip):8888:8888
 ```
 
 To stop the service 
