@@ -1,5 +1,6 @@
 FROM buildpack-deps:trusty
 
+MAINTAINER Prabeesh K.<prabsmails@gmail.com>
 
 # install java
 # https://github.com/dockerfile/java/blob/master/oracle-java7/Dockerfile
@@ -14,7 +15,6 @@ RUN \
     rm -rf /var/cache/oracle-jdk7-installer
 
 ENV JAVA_HOME /usr/lib/jvm/java-7-oracle
-
 
 # install spark
 ENV SPARK_VERSION 1.4.0
