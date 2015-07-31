@@ -2,6 +2,5 @@ web:
     build: .
     ports:
         - "8888:8888"
-        - "4040:4040"
     working_dir:
         - .:/notebook

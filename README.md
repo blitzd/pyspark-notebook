@@ -5,19 +5,12 @@ Install `docker-compose`
 pip install -U docker-compose
 ```
 
-To start your application, run following command 
+To start your apllication. Run following command 
 ```shell
 docker-compose up -d
 ```
 
-Then open the notebook page
-```shell
-open http://localhost:8888
-```
-or if using boot2docker
-```shell
-open http://$(boot2docker ip):8888
-```
+Visit ```http://127.0.0.1:8888```
 
 To stop the service 
 ```shell
