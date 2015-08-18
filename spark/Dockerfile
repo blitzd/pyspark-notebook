@@ -52,6 +52,16 @@ RUN /opt/anaconda/bin/ipython profile create pyspark
 RUN apt-get clean &&\
     /opt/anaconda/bin/conda clean -y -i -t -p
 
+RUN cd $SPARK_HOME && \
+    mkdir packages && \
+    cd packages && \
+    wget http://central.maven.org/maven2/com/databricks/spark-csv_2.10/1.2.0/spark-csv_2.10-1.2.0.jar && \
+    cd ~ && \
+    wget http://apache.mirror.iweb.ca//commons/csv/binaries/commons-csv-1.1-bin.tar.gz && \
+    tar xzf commons-csv-1.1-bin.tar.gz && \
+    mv commons-csv-1.1/commons-csv-1.1.jar $SPARK_HOME/packages && \
+    rm -rf commons-csv*
+
 COPY pyspark-notebook.py /root/.ipython/profile_pyspark/startup/pyspark-notebook.py
 
 VOLUME /notebook
@@ -59,4 +69,7 @@ WORKDIR /notebook
 
 EXPOSE 8888
 
-CMD /opt/anaconda/bin/ipython notebook --no-browser --profile=pyspark --ip=*
+ENV PYSPARK_DRIVER_PYTHON=/opt/anaconda/bin/ipython 
+ENV PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --notebook-dir=/notebook --ip=*" 
+CMD $SPARK_HOME/bin/pyspark --jars $SPARK_HOME/packages/spark-csv_2.10-1.2.0.jar,$SPARK_HOME/packages/commons-csv-1.1.jar
+#CMD /opt/anaconda/bin/ipython notebook --no-browser --profile=pyspark --ip=*
