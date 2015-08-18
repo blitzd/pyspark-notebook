@@ -3,4 +3,5 @@ web:
   ports:
     - "8888:8888"
   working_dir: /notebook
-
+  volumes: 
+    - ~/data:/tmp/data
